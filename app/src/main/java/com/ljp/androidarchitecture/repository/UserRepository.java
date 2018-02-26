@@ -4,8 +4,12 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import com.ljp.androidarchitecture.BuildConfig;
 import com.ljp.androidarchitecture.backend.Webservice;
+import com.ljp.androidarchitecture.pojo.Result;
 import com.ljp.androidarchitecture.pojo.User;
 
 import javax.inject.Inject;
@@ -49,14 +53,18 @@ public class UserRepository {
     public LiveData<User> getUser(String userId) {
         // This is not an optimal implementation, we'll fix it below
         final MutableLiveData<User> data = new MutableLiveData<>();
-        webservice.loadConfig().enqueue(new Callback<User>() {
+        webservice.loadConfig().enqueue(new Callback<String>() {
             @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-                data.setValue(response.body());
+            public void onResponse(Call<String> call, Response<String> response) {
+                String body = response.body();
+                Gson gson = new GsonBuilder().create();
+                Result<User> result = gson.fromJson(body, new TypeToken<Result<User>>() {
+                }.getType());
+                if (result != null) data.setValue(result.data);
             }
 
             @Override
-            public void onFailure(Call<User> call, Throwable t) {
+            public void onFailure(Call<String> call, Throwable t) {
 
             }
         });

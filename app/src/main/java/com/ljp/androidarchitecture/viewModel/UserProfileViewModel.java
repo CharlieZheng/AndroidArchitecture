@@ -3,6 +3,7 @@ package com.ljp.androidarchitecture.viewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
 
+import com.ljp.androidarchitecture.component.DaggerUserProfileViewModelComponent;
 import com.ljp.androidarchitecture.pojo.User;
 import com.ljp.androidarchitecture.repository.UserRepository;
 
@@ -12,11 +13,11 @@ public class UserProfileViewModel extends ViewModel {
 
 
     private LiveData<User> user;
-    private UserRepository userRepository;
-
     @Inject
-    public UserProfileViewModel(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserRepository userRepository;
+
+    public UserProfileViewModel() {
+        DaggerUserProfileViewModelComponent.create().inject(this);
     }
 
     public void init(String userId) {

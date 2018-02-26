@@ -34,7 +34,8 @@ public class UserProfileFragment extends Fragment {
             @Override
             public void onChanged(@Nullable User user) {
                 TextView appName = (TextView) root.findViewById(R.id.appName);
-                appName.setText(user.toString());
+                if (user != null && user.appConfig != null && user.appConfig.changelog != null)
+                    appName.setText(user.appConfig.changelog);
             }
         });
     }
