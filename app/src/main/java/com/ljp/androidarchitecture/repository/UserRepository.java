@@ -4,21 +4,16 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.util.Log;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 import com.ljp.androidarchitecture.BuildConfig;
 import com.ljp.androidarchitecture.backend.Webservice;
-import com.ljp.androidarchitecture.pojo.Result;
+import com.ljp.androidarchitecture.pojo.AppConfig;
 import com.ljp.androidarchitecture.pojo.User;
+import com.ljp.androidarchitecture.pojo.UserCache;
 
 import javax.inject.Inject;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
@@ -49,10 +44,22 @@ public class UserRepository {
         webservice = retrofit.create(Webservice.class);
     }
 
-    // ...
+    private UserCache userCache;
+
     public LiveData<User> getUser(String userId) {
-        // This is not an optimal implementation, we'll fix it below
+
+        User user = new User();
+        AppConfig appConfig = new AppConfig();
+        appConfig.changelog = "Hello world!";
+        user.appConfig = appConfig;
+
+        final MutableLiveData<User> tempData = new MutableLiveData<>();
+        tempData.setValue(user);
+        return tempData;
+        /*LiveData<User> temp = userCache.get();
+        if (temp != null) return temp;
         final MutableLiveData<User> data = new MutableLiveData<>();
+        userCache.put(data);
         webservice.loadConfig().enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
@@ -68,6 +75,6 @@ public class UserRepository {
 
             }
         });
-        return data;
+        return data;*/
     }
 }
