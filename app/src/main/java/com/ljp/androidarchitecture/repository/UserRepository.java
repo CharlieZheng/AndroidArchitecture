@@ -40,6 +40,8 @@ public class UserRepository {
 
     @Inject
     public UserRepository() {
+        String methodName = Thread.currentThread().getStackTrace()[2].getMethodName();
+        Log.v(methodName, "UserRepository construction");
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(new MyLogger1());
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient client = new OkHttpClient.Builder()
@@ -56,9 +58,19 @@ public class UserRepository {
     }
 
     public LiveData<User> getUser(String userId) {
-
+        String methodName = Thread.currentThread().getStackTrace()[2].getMethodName();
         LiveData<User> temp = userCache.get();
-        if (temp != null) return temp;
+        if (temp != null) {
+            Log.v(methodName, "temp is not null");
+
+            User user = temp.getValue();
+            if (user != null && user.appConfig != null && user.appConfig.changelog != null)
+                Log.v(methodName, user.appConfig.changelog);
+            return temp;
+        } else {
+            Log.v(methodName, "temp is null");
+
+        }
         final MutableLiveData<User> data = new MutableLiveData<>();
         userCache.put(data);
         webservice.loadConfig().enqueue(new Callback<String>() {

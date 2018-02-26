@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,6 +49,8 @@ public class UserProfileFragment extends Fragment {
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        String tag = Thread.currentThread().getStackTrace()[2].getMethodName();
+        Log.v(tag, tag);
         super.onActivityCreated(savedInstanceState);
         final String userId = getArguments().getString(UID_KEY);
         viewModel = ViewModelProviders.of(this).get(UserProfileViewModel.class);
