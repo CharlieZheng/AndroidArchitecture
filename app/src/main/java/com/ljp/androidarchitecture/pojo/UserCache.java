@@ -9,7 +9,7 @@ import android.support.v4.util.LruCache;
 
 public class UserCache {
     private static final String KEY = UserCache.class.getName();
-    public LruCache<String, LiveData<User>> cache;
+    public LruCache<String, LiveData<User>> cache = new LruCache<>(1);
 
     public LiveData<User> get() {
         return cache.get(KEY);

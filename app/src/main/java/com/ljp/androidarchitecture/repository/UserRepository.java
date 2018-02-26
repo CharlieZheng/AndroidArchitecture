@@ -4,20 +4,28 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import com.ljp.androidarchitecture.BuildConfig;
 import com.ljp.androidarchitecture.backend.Webservice;
-import com.ljp.androidarchitecture.pojo.AppConfig;
+import com.ljp.androidarchitecture.pojo.Result;
 import com.ljp.androidarchitecture.pojo.User;
 import com.ljp.androidarchitecture.pojo.UserCache;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
+@Singleton
 public class UserRepository {
     private Webservice webservice;
 
@@ -27,6 +35,8 @@ public class UserRepository {
             if (BuildConfig.DEBUG) Log.i("HTTP_LOG", message);
         }
     }
+
+    private UserCache userCache;
 
     @Inject
     public UserRepository() {
@@ -42,21 +52,12 @@ public class UserRepository {
                 .client(client)
                 .build();
         webservice = retrofit.create(Webservice.class);
+        userCache = new UserCache();
     }
-
-    private UserCache userCache;
 
     public LiveData<User> getUser(String userId) {
 
-        User user = new User();
-        AppConfig appConfig = new AppConfig();
-        appConfig.changelog = "Hello world!";
-        user.appConfig = appConfig;
-
-        final MutableLiveData<User> tempData = new MutableLiveData<>();
-        tempData.setValue(user);
-        return tempData;
-        /*LiveData<User> temp = userCache.get();
+        LiveData<User> temp = userCache.get();
         if (temp != null) return temp;
         final MutableLiveData<User> data = new MutableLiveData<>();
         userCache.put(data);
@@ -75,6 +76,6 @@ public class UserRepository {
 
             }
         });
-        return data;*/
+        return data;
     }
 }
