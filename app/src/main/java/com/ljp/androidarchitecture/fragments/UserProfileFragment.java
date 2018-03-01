@@ -1,7 +1,9 @@
 package com.ljp.androidarchitecture.fragments;
 
 import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -19,15 +21,13 @@ import com.ljp.androidarchitecture.viewModel.UserProfileViewModel;
 
 import java.lang.ref.WeakReference;
 
-/**
- * @author hanrong
- */
+import javax.inject.Inject;
 
-public class UserProfileFragment extends Fragment {
+public class UserProfileFragment extends Fragment implements Injectable {
     private static class MyHandler extends Handler {
         private WeakReference<UserProfileFragment> ref;
 
-        public MyHandler(UserProfileFragment fragment) {
+        private MyHandler(UserProfileFragment fragment) {
             ref = new WeakReference<>(fragment);
         }
 
@@ -48,12 +48,24 @@ public class UserProfileFragment extends Fragment {
     private MyHandler myHandler = new MyHandler(this);
 
     @Override
+    public void onAttach(Context context) {
+        //AndroidSupportInjection.inject(this);
+        super.onAttach(context);
+
+    }
+
+    @Inject
+    public ViewModelProvider.Factory viewModelFactory;
+
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+
         String tag = Thread.currentThread().getStackTrace()[2].getMethodName();
         Log.v(tag, tag);
         super.onActivityCreated(savedInstanceState);
         final String userId = getArguments().getString(UID_KEY);
-        viewModel = ViewModelProviders.of(this).get(UserProfileViewModel.class);
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(UserProfileViewModel.class);
+        //viewModel = ViewModelProviders.of(this).get(UserProfileViewModel.class);
         viewModel.init(userId);
 
         new Thread(new Runnable() {
