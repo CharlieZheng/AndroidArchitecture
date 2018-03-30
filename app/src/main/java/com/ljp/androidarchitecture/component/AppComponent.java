@@ -18,11 +18,11 @@ public interface AppComponent {
     @Component.Builder
     interface Builder {
         @BindsInstance
-        Builder application(Application mainActivity);
+        Builder application(Application application);
 
         AppComponent build();
     }
 
-    void inject(MyApplication mainActivity);
+    void inject(MyApplication myApplication);
 
 }

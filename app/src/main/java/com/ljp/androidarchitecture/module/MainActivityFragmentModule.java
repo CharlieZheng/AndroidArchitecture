@@ -8,6 +8,8 @@ import dagger.android.ContributesAndroidInjector;
 @Module
 public abstract class MainActivityFragmentModule {
     @ContributesAndroidInjector
-    abstract UserProfileFragment contributeRepoFragment();
+    abstract UserProfileFragment f1();
+    /*@ContributesAndroidInjector
+    abstract FragmentBookSearch f2();*/
 
 }

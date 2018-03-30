@@ -17,8 +17,12 @@ public abstract class ViewModelModule {
     @Binds
     @IntoMap
     @ViewModelKey(UserProfileViewModel.class)
-    abstract ViewModel bindSearchViewModel(UserProfileViewModel searchViewModel);
+    abstract ViewModel f1(UserProfileViewModel searchViewModel);
 
     @Binds
-    abstract ViewModelProvider.Factory bindViewModelFactory(GithubViewModelFactory factory);
+    abstract ViewModelProvider.Factory f2(GithubViewModelFactory factory);
+    /*@Binds
+    @IntoMap
+    @ViewModelKey(ViewModelBookSearch.class)
+    abstract ViewModel f3(ViewModelBookSearch viewModel);*/
 }

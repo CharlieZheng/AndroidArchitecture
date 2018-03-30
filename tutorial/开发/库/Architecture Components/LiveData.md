@@ -62,3 +62,8 @@ In addition, if the UI component is recreated, it triggers another call to the r
 ## Merge multiple LiveData sources
 
 MediatorLiveData可使观察者同时观察多个被观察者
+
+#### 译者笔记
+     
+我猜想Room DAO中返回的LiveData不能getValue，而只能在观察者的onChange方法中取得数据库操作执行完毕后返回的值。
+getValue无法取得数据库值，因为数据库操作是异步，而onChange方法是该异步操作的回调。

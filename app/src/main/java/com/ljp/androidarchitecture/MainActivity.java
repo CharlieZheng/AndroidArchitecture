@@ -21,13 +21,20 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        boolean type = getIntent().getBooleanExtra(MainActivity.class.getName(), false);
+        Fragment fragment;
         if (savedInstanceState == null) {
-            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            UserProfileFragment userProfileFragment = new UserProfileFragment();
+//            if (type) {
             Bundle bundle = new Bundle();
             bundle.putString(UserProfileFragment.UID_KEY, "100");
-            userProfileFragment.setArguments(bundle);
-            fragmentTransaction.replace(R.id.frameLayout, userProfileFragment);
+            fragment = new UserProfileFragment();
+            fragment.setArguments(bundle);
+//            } else {
+//                fragment = new FragmentBookSearch();
+//            }
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.frameLayout, fragment);
             fragmentTransaction.commit();
         }
     }

@@ -1,6 +1,5 @@
 package com.ljp.androidarchitecture.fragments;
 
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
@@ -16,8 +15,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.ljp.androidarchitecture.R;
-import com.ljp.androidarchitecture.pojo.User;
+import com.ljp.androidarchitecture.pojo.Book;
 import com.ljp.androidarchitecture.viewModel.UserProfileViewModel;
+import com.ljp.androidarchitecture.vo.Resource;
 
 import java.lang.ref.WeakReference;
 
@@ -33,10 +33,13 @@ public class UserProfileFragment extends Fragment implements Injectable {
 
         @Override
         public void handleMessage(Message msg) {
-            if (msg.obj instanceof User) {
-                User user = (User) msg.obj;
-                if (user.appConfig != null && user.appConfig.changelog != null)
-                    ref.get().appName.setText(user.appConfig.changelog);
+            if (msg.obj instanceof Resource) {
+                Resource resource = (Resource) msg.obj;
+                if (resource.data instanceof Book[]) {
+
+                    Book[] book = (Book[]) resource.data;
+                    if (book.length > 0) ref.get().appName.setText(book[0].getImages().getLarge());
+                }
             }
         }
     }
@@ -65,35 +68,22 @@ public class UserProfileFragment extends Fragment implements Injectable {
         super.onActivityCreated(savedInstanceState);
         final String userId = getArguments().getString(UID_KEY);
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(UserProfileViewModel.class);
-        //viewModel = ViewModelProviders.of(this).get(UserProfileViewModel.class);
         viewModel.init(userId);
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(3000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                viewModel.getUser().observe(UserProfileFragment.this, new Observer<User>() {
-                    @Override
-                    public void onChanged(@Nullable User user) {
-                        Message msg = new Message();
-                        msg.obj = user;
-                        myHandler.sendMessage(msg);
-                    }
-                });
-            }
-        }).start();
+        viewModel.getBook().observe(UserProfileFragment.this, book -> {
+            Message msg = new Message();
+            msg.obj = book;
+            myHandler.sendMessage(msg);
+        });
 
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater,
+    public View onCreateView(@Nullable LayoutInflater inflater,
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        if (inflater == null) return null;
         View root = inflater.inflate(R.layout.user_profile_layout, container, false);
         appName = (TextView) root.findViewById(R.id.appName);
+        root.findViewById(R.id.changeDataInDatabase).setOnClickListener(v -> viewModel.changeDataInDatabase());
         return root;
     }
 }

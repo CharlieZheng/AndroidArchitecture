@@ -16,6 +16,15 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent it = new Intent(SplashActivity.this, MainActivity.class);
+                it.putExtra(MainActivity.class.getName(), false);
+                startActivity(it);
+            }
+        });
+        ((Button) findViewById(R.id.bookSearch)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent it = new Intent(SplashActivity.this, MainActivity.class);
+                it.putExtra(MainActivity.class.getName(), true);
                 startActivity(it);
             }
         });
