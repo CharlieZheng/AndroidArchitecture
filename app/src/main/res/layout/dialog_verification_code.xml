@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/editText"
+        android:layout_width="@dimen/verification_code_box_size"
+        android:layout_height="@dimen/verification_code_box_size"
+        android:background="@drawable/verification_code_shape_normal"
+        android:gravity="center"
+        android:maxLength="1" />
+
+    <com.iousave.www.widgets.VerificationCodeEditText
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/verification_code_box_size"
+        app:layout_constraintTop_toBottomOf="@id/editText" />
+
+</android.support.constraint.ConstraintLayout>

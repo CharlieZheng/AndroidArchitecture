@@ -3,4 +3,6 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="btn_text">#A4B0BE</color>
+    <color name="room_number_enter_pressed">#D0011B</color>
 </resources>
